@@ -75,6 +75,6 @@ func solve(input string, includeWords bool) (sum int) {
 func main() {
 	input := "input.txt"
 
-	fmt.Println("Task 1 - # calories of top elve \t =  ", solve(input, false))
-	fmt.Println("Task 2 - # cal sum of top 3 elves \t =  ", solve(input, true))
+	fmt.Println("Task 1 - sum of digits                     \t =  ", solve(input, false))
+	fmt.Println("Task 2 - sum of digits and written numbers \t =  ", solve(input, true))
 }
