@@ -5,29 +5,28 @@ import (
 )
 
 type testdata struct {
-	fname string
-
+	fname     string
 	expected1 int
 	expected2 int
 }
 
-var testset []*testdata = []*testdata{{"example1.txt", 13, 13}}
+var testset []*testdata = []*testdata{{"example.txt", 13, 30}}
 
 func TestTaskOne(t *testing.T) {
 
 	for _, test := range testset {
-		r := solve(test.fname)
+		r, _ := solve(test.fname)
 		if r != test.expected1 {
 			t.Fatalf("Test '%s' failed. Got '%d' -  Wanted: '%d'", test.fname, r, test.expected1)
 		}
 	}
 }
 
-// func TestTaskTwo(t *testing.T) {
-// 	for _, test := range testset {
-// 		_, r := solve(test.fname, test.maxred, test.maxgreen, test.maxblue)
-// 		if r != test.expected2 {
-// 			t.Fatalf("Test '%s' failed. Got '%d' -  Wanted: '%d'", test.fname, r, test.expected2)
-// 		}
-// 	}
-// }
+func TestTaskTwo(t *testing.T) {
+	for _, test := range testset {
+		_, r := solve(test.fname)
+		if r != test.expected2 {
+			t.Fatalf("Test '%s' failed. Got '%d' -  Wanted: '%d'", test.fname, r, test.expected2)
+		}
+	}
+}
