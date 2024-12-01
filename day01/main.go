@@ -1,75 +1,80 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"log"
 	"os"
-	"sort"
+	"strconv"
+	"strings"
 )
 
-func readInput(input string) (left []int, right []int) {
-	f, ferr := os.Open(input)
-	if ferr != nil {
-		log.Fatalf("Error opening dataset '%s':  %s", input, ferr)
-	}
-	defer f.Close()
+var numbers []string = []string{"one", "two", "three", "four", "five", "six", "seven", "eight", "nine"}
 
-	var l, r int = 0, 0
-	var err error
-	for err == nil {
-		if _, err = fmt.Fscanf(f, "%d %d\n", &l, &r); err == nil {
-			left = append(left, l)
-			right = append(right, r)
-			l, r = 0, 0
+func getLineSum(line string, includeWords bool) (num int) {
+	index := len(line)
+	for pos, c := range line {
+		if n, err := strconv.Atoi(string(c)); err == nil {
+			num = 10 * n
+			index = pos
+			break
+		}
+	}
+	if includeWords {
+		for i, n := range numbers {
+			pos := strings.Index(line, n)
+			if pos >= 0 && pos <= index {
+				num = 10 * (i + 1)
+				index = pos
+			}
 		}
 	}
 
-	return left, right
+	index = -1
+	n := -1
+	for pos := len(line) - 1; pos >= 0; pos-- {
+		if t, err := strconv.Atoi(string(line[pos])); err == nil {
+			n = t
+			index = pos
+			break
+		}
+	}
+	if includeWords {
+		for i, sn := range numbers {
+			pos := strings.LastIndex(line, sn)
+			if pos >= 0 && pos >= index {
+				n = i + 1
+				index = pos
+			}
+		}
+	}
+	num = num + n
+	return num
 }
 
-func abs(x int) (a int) {
-	if x < 0 {
-		a = -x
-	} else {
-		a = x
+func solve(input string, includeWords bool) (sum int) {
+	f, err := os.Open(input)
+	if err != nil {
+		log.Fatalf("Error opening dataset '%s':  %s", input, err)
+	}
+	defer f.Close()
+
+	scanner := bufio.NewScanner(f)
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		sum = sum + getLineSum(line, includeWords)
+	}
+	if err := scanner.Err(); err != nil {
+		fmt.Fprintln(os.Stderr, "reading standard input:", err)
 	}
 
-	return a
-}
-
-func solve1(input string) (sum int) {
-	left, right := readInput(input)
-	sort.Ints(left)
-	sort.Ints(right)
-
-	for i, l := range left {
-		r := right[i]
-		sum += abs(l - r)
-	}
-
-	return sum
-}
-
-func solve2(input string) (sum int) {
-	left, right := readInput(input)
-	sort.Ints(left)
-	sort.Ints(right)
-
-	var frequencies map[int]int = make(map[int]int)
-
-	for _, r := range right {
-		frequencies[r]++
-	}
-
-	for _, l := range left {
-		sum += l * frequencies[l]
-	}
 	return sum
 }
 
 func main() {
 	input := "input.txt"
 
-	fmt.Println("Task 1 - Total distance    \t =  ", solve1(input))
-	fmt.Println("Task 2 - Similarity score \t =  ", solve2(input))
+	fmt.Println("Task 1 - sum of digits                     \t =  ", solve(input, false))
+	fmt.Println("Task 2 - sum of digits and written numbers \t =  ", solve(input, true))
 }
