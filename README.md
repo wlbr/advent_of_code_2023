@@ -1,8 +1,8 @@
 # advent_of_code_2023
 
-See https://adventofcode.com/2023
+See https://adventofcode.com/2024
 
-My stats: https://adventofcode.com/2023/leaderboard/self
+My stats: https://adventofcode.com/2024/leaderboard/self
 
 My Leaderboards:
 

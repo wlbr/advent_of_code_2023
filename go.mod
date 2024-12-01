@@ -1,3 +1,3 @@
-module github.com/wlbr/advent_of_code_2023
+module github.com/wlbr/advent_of_code_2024
 
-go 1.18
+go 1.22
